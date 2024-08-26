@@ -26,10 +26,14 @@ export class ClientsController {
     try {
       return this.clientsService.findClient(documentType, documentNumber);
     } catch (error) {
-      throw new HttpException(
-        error.message,
-        error.getStatus ? error.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          'Internal server error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }
